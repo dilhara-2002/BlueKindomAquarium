@@ -1,0 +1,154 @@
+.about {
+  height: 100vh;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+
+.about-container {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+}
+
+/* Left Sidebar - Contact Information */
+.contact-sidebar {
+  width: 250px;
+  background-color: #000000;
+  color: white;
+  padding: 30px 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.contact-sidebar h3 {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.contact-info {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.9rem;
+}
+
+.contact-item svg {
+  flex-shrink: 0;
+}
+
+.contact-item span {
+  line-height: 1.4;
+}
+
+/* Main Content Area */
+.about-content {
+  flex: 1;
+  background: radial-gradient(circle, #1e3a8a 0%, #000000 70%);
+  color: white;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.about-content h1 {
+  font-size: 3rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+}
+
+.slogan {
+  font-size: 1.3rem;
+  color: #60a5fa;
+  font-style: italic;
+  margin-bottom: 40px;
+  font-family: 'Georgia', serif;
+}
+
+.about-description {
+  max-width: 600px;
+  margin-bottom: 50px;
+}
+
+.about-description p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  opacity: 0.9;
+}
+
+.vision-mission {
+  display: flex;
+  gap: 40px;
+  max-width: 800px;
+  width: 100%;
+}
+
+.vision-section,
+.mission-section {
+  flex: 1;
+  text-align: left;
+}
+
+.vision-section h2,
+.mission-section h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: white;
+}
+
+.content-box {
+  border: 2px solid #3b82f6;
+  padding: 20px;
+  border-radius: 8px;
+  background-color: rgba(59, 130, 246, 0.1);
+}
+
+.content-box p {
+  font-size: 1rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .about-container {
+    flex-direction: column;
+  }
+  
+  .contact-sidebar {
+    width: 100%;
+    padding: 20px;
+  }
+  
+  .about-content {
+    padding: 30px 20px;
+  }
+  
+  .about-content h1 {
+    font-size: 2rem;
+  }
+  
+  .vision-mission {
+    flex-direction: column;
+    gap: 30px;
+  }
+  
+  .vision-section,
+  .mission-section {
+    text-align: center;
+  }
+}
