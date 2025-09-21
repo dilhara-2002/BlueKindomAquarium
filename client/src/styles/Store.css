@@ -109,9 +109,10 @@
 
 .products-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fill, 200px);
   gap: 20px;
   max-width: 100%;
+  justify-content: start;
 }
 
 /* Product Card Component Styles */
@@ -211,7 +212,8 @@
   }
   
   .products-grid {
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    grid-template-columns: repeat(auto-fill, 150px);
     gap: 15px;
+    justify-content: start;
   }
 }
