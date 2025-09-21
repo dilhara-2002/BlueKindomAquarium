@@ -16,14 +16,14 @@ const Store = () => {
   ];
 
   const products = [
-    { id: 1, name: 'Gold Fish', price: 100, category: 'fish', inStock: false },
-    { id: 2, name: 'Gold Fish', price: 100, category: 'fish', inStock: false },
-    { id: 3, name: 'Gold Fish', price: 100, category: 'fish', inStock: true },
-    { id: 4, name: 'Gold Fish', price: 100, category: 'fish', inStock: false },
-    { id: 5, name: 'Gold Fish', price: 100, category: 'fish', inStock: true },
-    { id: 6, name: 'Gold Fish', price: 100, category: 'fish', inStock: true },
-    { id: 7, name: 'Gold Fish', price: 100, category: 'fish', inStock: true },
-    { id: 8, name: 'Gold Fish', price: 100, category: 'fish', inStock: false }
+    { id: 1, name: 'Arowana Fish', image: 'arowana.png', price: 5000, category: 'fish', inStock: false },
+    { id: 2, name: 'Gold Fish', image: 'fish.png', price: 100, category: 'fish', inStock: false },
+    { id: 3, name: 'Blue Care', image: 'blue.png', price: 100, category: 'medicine', inStock: true },
+    { id: 4, name: 'Gold Fish', image: 'fish.png', price: 100, category: 'fish', inStock: false },
+    { id: 5, name: 'Gold Fish', image: 'fish.png', price: 100, category: 'fish', inStock: true },
+    { id: 6, name: 'Gold Fish', image: 'fish.png', price: 100, category: 'fish', inStock: true },
+    { id: 7, name: 'Gold Fish', image: 'fish.png', price: 100, category: 'fish', inStock: true },
+    { id: 8, name: 'Gold Fish', image: 'fish.png', price: 100, category: 'fish', inStock: false }
   ];
 
   const filteredProducts = selectedCategory === 'all' 

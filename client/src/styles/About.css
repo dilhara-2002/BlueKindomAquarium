@@ -1,6 +1,5 @@
 .about {
   height: 100vh;
-  overflow: hidden;
   margin: 0;
   padding: 0;
   display: flex;
@@ -20,6 +19,7 @@
   padding: 30px 20px;
   display: flex;
   flex-direction: column;
+  border-right: 2px solid white;
 }
 
 .contact-sidebar h3 {
