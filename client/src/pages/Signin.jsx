@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import '../styles/Signinup.css';
 
 const Signin = () => {
@@ -7,18 +8,37 @@ const Signin = () => {
     email: '',
     password: ''
   });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
     });
+    setError(''); // Clear error when user types
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // TODO: Implement sign in functionality
-    console.log('Sign in data:', formData);
+    setLoading(true);
+    setError('');
+
+    try {
+      const result = await login(formData);
+      
+      if (result.success) {
+        navigate('/');
+      } else {
+        setError(result.error || 'Login failed. Please try again.');
+      }
+    } catch (error) {
+      setError('An unexpected error occurred. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -31,6 +51,12 @@ const Signin = () => {
           </div>
           
           <form onSubmit={handleSubmit} className="auth-form">
+            {error && (
+              <div className="error-message" style={{ color: 'red', marginBottom: '10px', textAlign: 'center' }}>
+                {error}
+              </div>
+            )}
+            
             <div className="form-group">
               <input
                 type="email"
@@ -39,6 +65,7 @@ const Signin = () => {
                 value={formData.email}
                 onChange={handleChange}
                 required
+                disabled={loading}
               />
             </div>
             
@@ -50,11 +77,12 @@ const Signin = () => {
                 value={formData.password}
                 onChange={handleChange}
                 required
+                disabled={loading}
               />
             </div>
             
-            <button type="submit" className="auth-button">
-              Sign In
+            <button type="submit" className="auth-button" disabled={loading}>
+              {loading ? 'Signing In...' : 'Sign In'}
             </button>
           </form>
           

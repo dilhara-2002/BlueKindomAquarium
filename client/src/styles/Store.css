@@ -196,6 +196,27 @@
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
 
+/* Loading and Error States */
+.loading-message,
+.no-products-message {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: #ffffff;
+  font-size: 1.2rem;
+  padding: 40px 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  border: 2px solid #3b82f6;
+}
+
+.loading-message {
+  color: #60a5fa;
+}
+
+.no-products-message {
+  color: #ef4444;
+}
+
 /* Responsive design */
 @media (max-width: 768px) {
   .store-container {

@@ -1,11 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import ProductCard from '../components/ProductCard';
+import { useSearch } from '../context/SearchContext';
+import { productAPI } from '../services/api';
 import '../styles/Store.css';
 
 const Store = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [minPrice, setMinPrice] = useState('');
   const [maxPrice, setMaxPrice] = useState('');
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const { products } = useSearch();
 
   const categories = [
     { id: 'fish', name: 'Fish' },
@@ -15,20 +20,37 @@ const Store = () => {
     { id: 'foods', name: 'Foods' }
   ];
 
-  const products = [
-    { id: 1, name: 'Arowana Fish', image: 'arowana.png', price: 5000, category: 'fish', inStock: false },
-    { id: 2, name: 'Gold Fish', image: 'fish.png', price: 100, category: 'fish', inStock: false },
-    { id: 3, name: 'Blue Care', image: 'blue.png', price: 100, category: 'medicine', inStock: true },
-    { id: 4, name: 'Gold Fish', image: 'fish.png', price: 100, category: 'fish', inStock: false },
-    { id: 5, name: 'Gold Fish', image: 'fish.png', price: 100, category: 'fish', inStock: true },
-    { id: 6, name: 'Gold Fish', image: 'fish.png', price: 100, category: 'fish', inStock: true },
-    { id: 7, name: 'Gold Fish', image: 'fish.png', price: 100, category: 'fish', inStock: true },
-    { id: 8, name: 'Gold Fish', image: 'fish.png', price: 100, category: 'fish', inStock: false }
-  ];
+  const applyFilters = useCallback(async () => {
+    try {
+      setLoading(true);
+      const filters = {};
+      
+      if (selectedCategory !== 'all') {
+        filters.category = selectedCategory;
+      }
+      
+      if (minPrice) {
+        filters.minPrice = minPrice;
+      }
+      
+      if (maxPrice) {
+        filters.maxPrice = maxPrice;
+      }
 
-  const filteredProducts = selectedCategory === 'all' 
-    ? products 
-    : products.filter(product => product.category === selectedCategory);
+      const data = await productAPI.getProducts(filters);
+      setFilteredProducts(data);
+    } catch (error) {
+      console.error('Error filtering products:', error);
+      setFilteredProducts([]);
+    } finally {
+      setLoading(false);
+    }
+  }, [selectedCategory, minPrice, maxPrice]);
+
+  // Apply filters when filter values change
+  useEffect(() => {
+    applyFilters();
+  }, [applyFilters]);
 
   return (
     <div className="store">
@@ -83,9 +105,15 @@ const Store = () => {
         {/* Main Content Area - Products */}
         <div className="products-area">
           <div className="products-grid">
-            {filteredProducts.map(product => (
-              <ProductCard key={product.id} product={product} />
-            ))}
+            {loading ? (
+              <div className="loading-message">Loading products...</div>
+            ) : filteredProducts.length > 0 ? (
+              filteredProducts.map(product => (
+                <ProductCard key={product._id} product={product} />
+              ))
+            ) : (
+              <div className="no-products-message">No products found matching your criteria.</div>
+            )}
           </div>
         </div>
       </div>

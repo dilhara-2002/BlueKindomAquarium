@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { searchAPI, productAPI } from '../services/api';
 
 const SearchContext = createContext();
 
@@ -13,20 +14,28 @@ export const useSearch = () => {
 export const SearchProvider = ({ children }) => {
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // Product data - same as in Store component
-  const products = [
-    { id: 1, name: 'Arowana Fish', image: 'arowana.png', price: 5000, category: 'fish', inStock: false },
-    { id: 2, name: 'Gold Fish', image: 'fish.png', price: 100, category: 'fish', inStock: false },
-    { id: 3, name: 'Blue Care', image: 'blue.png', price: 100, category: 'medicine', inStock: true },
-    { id: 4, name: 'Gold Fish', image: 'fish.png', price: 100, category: 'fish', inStock: false },
-    { id: 5, name: 'Gold Fish', price: 100, category: 'fish', inStock: true },
-    { id: 6, name: 'Gold Fish', price: 100, category: 'fish', inStock: true },
-    { id: 7, name: 'Gold Fish', price: 100, category: 'fish', inStock: true },
-    { id: 8, name: 'Gold Fish', price: 100, category: 'fish', inStock: false }
-  ];
+  const loadProducts = useCallback(async () => {
+    try {
+      setLoading(true);
+      const data = await productAPI.getProducts();
+      setProducts(data);
+    } catch (error) {
+      console.error('Error loading products:', error);
+      setProducts([]);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
-  const searchProducts = (query) => {
+  // Load all products on component mount
+  useEffect(() => {
+    loadProducts();
+  }, [loadProducts]);
+
+  const searchProducts = useCallback(async (query) => {
     if (!query.trim()) {
       setSearchResults([]);
       setIsSearching(false);
@@ -35,25 +44,28 @@ export const SearchProvider = ({ children }) => {
 
     setIsSearching(true);
     
-    // Search by letter matching (case-insensitive)
-    const filtered = products.filter(product => 
-      product.name.toLowerCase().includes(query.toLowerCase())
-    );
-    
-    setSearchResults(filtered);
-  };
+    try {
+      const data = await searchAPI.searchProducts(query);
+      setSearchResults(data);
+    } catch (error) {
+      console.error('Error searching products:', error);
+      setSearchResults([]);
+    }
+  }, []);
 
-  const clearSearch = () => {
+  const clearSearch = useCallback(() => {
     setSearchResults([]);
     setIsSearching(false);
-  };
+  }, []);
 
   const value = {
     searchResults,
     isSearching,
     searchProducts,
     clearSearch,
-    products
+    products,
+    loading,
+    loadProducts
   };
 
   return (
