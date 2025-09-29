@@ -62,10 +62,6 @@ const Navbar = () => {
     setShowSearchResults(false);
     clearSearch();
     navigate('/store');
-    // Refresh page after navigation
-    setTimeout(() => {
-      window.location.reload();
-    }, 100);
   };
 
   const handleInputChange = (e) => {
@@ -74,10 +70,6 @@ const Navbar = () => {
 
   const handleNavClick = (path) => {
     navigate(path);
-    // Refresh page after navigation
-    setTimeout(() => {
-      window.location.reload();
-    }, 100);
   };
 
   const handleLogout = () => {
@@ -166,9 +158,6 @@ const Navbar = () => {
               <button 
                 onClick={() => {
                   navigate('/cart');
-                  setTimeout(() => {
-                    window.location.reload();
-                  }, 100);
                 }}
                 className="icon-link cart-icon"
               >
@@ -208,9 +197,6 @@ const Navbar = () => {
                 <button 
                   onClick={() => {
                     navigate('/signin');
-                    setTimeout(() => {
-                      window.location.reload();
-                    }, 100);
                   }}
                   className="icon-link"
                 >

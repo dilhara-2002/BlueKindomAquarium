@@ -13,24 +13,7 @@ import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import './App.css';
 
-// Component to handle auto-refresh
-const AutoRefresh = ({ children }) => {
-  const location = useLocation();
 
-  useEffect(() => {
-    // Auto refresh every 30 seconds (30000 milliseconds)
-    const refreshInterval = setInterval(() => {
-      window.location.reload();
-    }, 30000); // 30 seconds
-
-    // Cleanup interval on component unmount
-    return () => {
-      clearInterval(refreshInterval);
-    };
-  }, [location.pathname]); // Re-run effect when location changes
-
-  return children;
-};
 
 function App() {
   return (
@@ -38,22 +21,20 @@ function App() {
       <CartProvider>
         <SearchProvider>
           <Router>
-            <AutoRefresh>
-              <div className="App">
-                <Navbar />
-                <main className="main-content">
-                  <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/about" element={<About />} />
-                    <Route path="/store" element={<Store />} />
-                    <Route path="/cart" element={<Cart />} />
-                    <Route path="/signin" element={<Signin />} />
-                    <Route path="/signup" element={<Signup />} />
-                    <Route path="/settings" element={<Settings />} />
-                  </Routes>
-                </main>
-              </div>
-            </AutoRefresh>
+            <div className="App">
+              <Navbar />
+              <main className="main-content">
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/about" element={<About />} />
+                  <Route path="/store" element={<Store />} />
+                  <Route path="/cart" element={<Cart />} />
+                  <Route path="/signin" element={<Signin />} />
+                  <Route path="/signup" element={<Signup />} />
+                  <Route path="/settings" element={<Settings />} />
+                </Routes>
+              </main>
+            </div>
           </Router>
         </SearchProvider>
       </CartProvider>
