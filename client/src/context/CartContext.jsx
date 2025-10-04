@@ -111,6 +111,23 @@ export const CartProvider = ({ children }) => {
 
   const clearCart = () => {
     setCartItems([]);
+    // Also clear persisted cart and reset count so UI (badge) updates immediately
+    try {
+      localStorage.removeItem('cart');
+    } catch (err) {
+      // ignore storage errors
+    }
+    setCartCount(0);
+  };
+
+  const replaceCart = (items) => {
+    setCartItems(items);
+    try {
+      localStorage.setItem('cart', JSON.stringify(items));
+    } catch (err) {
+      // ignore
+    }
+    updateCartCount(items || []);
   };
 
   const getCartTotal = () => {
@@ -128,6 +145,7 @@ export const CartProvider = ({ children }) => {
   const value = {
     cartItems,
     cartCount,
+    replaceCart,
     addToCart,
     updateQuantity,
     removeFromCart,

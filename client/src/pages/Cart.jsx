@@ -38,28 +38,37 @@ const Cart = () => {
     }
 
     setLoading(true);
+    // optimistic UI: clear cart immediately and persist previous state to restore if needed
+    const previousCart = [...cartItems];
     try {
-          // Prepare order data
-          const orderData = {
-            items: cartItems.map(item => ({
-              productId: item.productId,
-              quantity: item.quantity,
-              price: item.price
-            })),
-            paymentMethod: 'cash_on_delivery'
-          };
+      clearCart();
+
+      // Prepare order data
+      const orderData = {
+        items: previousCart.map(item => ({
+          productId: item.productId,
+          quantity: item.quantity,
+          price: item.price
+        })),
+        paymentMethod: 'cash_on_delivery'
+      };
 
       // Create order
       const response = await orderAPI.createOrder(orderData);
-      
+
       if (response.order) {
         alert('Order placed successfully! Order ID: ' + response.order._id);
-        clearCart();
         navigate('/');
+      } else {
+        // restore cart if API didn't return an order
+        replaceCart(previousCart);
+        alert('Failed to place order: no order created');
       }
     } catch (error) {
       console.error('Checkout error:', error);
-      alert('Failed to place order: ' + error.message);
+      // restore cart on error
+      replaceCart(previousCart);
+      alert('Failed to place order: ' + (error.message || 'Unknown error'));
     } finally {
       setLoading(false);
     }
