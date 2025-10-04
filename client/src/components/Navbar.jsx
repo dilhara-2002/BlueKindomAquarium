@@ -139,9 +139,14 @@ const Navbar = () => {
                         >
                           <span className="result-name">{product.name}</span>
                           <span className="result-price">${product.price}</span>
-                          <span className={`result-status ${product.inStock ? 'in-stock' : 'out-of-stock'}`}>
-                            {product.inStock ? 'In Stock' : 'Out of Stock'}
-                          </span>
+                          {(() => {
+                            const isOutOfStock = (product.inStock === false) || (typeof product.stock === 'number' && product.stock <= 0);
+                            return (
+                              <span className={`result-status ${!isOutOfStock ? 'in-stock' : 'out-of-stock'}`}>
+                                {!isOutOfStock ? 'In Stock' : 'Out of Stock'}
+                              </span>
+                            );
+                          })()}
                         </div>
                       ))}
                     </div>

@@ -39,16 +39,15 @@ const Cart = () => {
 
     setLoading(true);
     try {
-      // Prepare order data
-      const orderData = {
-        items: cartItems.map(item => ({
-          productId: item.productId,
-          quantity: item.quantity,
-          price: item.price
-        })),
-        shippingAddress: address,
-        paymentMethod: 'cash_on_delivery'
-      };
+          // Prepare order data
+          const orderData = {
+            items: cartItems.map(item => ({
+              productId: item.productId,
+              quantity: item.quantity,
+              price: item.price
+            })),
+            paymentMethod: 'cash_on_delivery'
+          };
 
       // Create order
       const response = await orderAPI.createOrder(orderData);
@@ -74,24 +73,7 @@ const Cart = () => {
     }
   };
 
-  // Shipping address local state (editable on cart)
-  const [address, setAddress] = useState({
-    street: '',
-    city: '',
-    state: '',
-    zipCode: '',
-    country: ''
-  });
-
-  // Prefill from user profile if present
-  React.useEffect(() => {
-    if (user?.shippingAddress) {
-      setAddress(prev => ({
-        ...prev,
-        ...user.shippingAddress
-      }));
-    }
-  }, [user]);
+  // Shipping address removed from cart page (handled during checkout/profile)
 
   // Show loading while auth is being checked
   if (authLoading) {
@@ -166,20 +148,7 @@ const Cart = () => {
             </div>
           ) : (
             <>
-              <div className="address-form" style={{ width: '90%', margin: '0 auto 20px auto', padding: '12px', borderRadius: '12px', outline: '1px solid #ffffff30' }}>
-                <h4 style={{ color: '#fff', margin: '0 0 10px 0' }}>Shipping Address</h4>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '10px' }}>
-                  <input type="text" placeholder="Street" value={address.street} onChange={e => setAddress({ ...address, street: e.target.value })} className="search-input" />
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-                    <input type="text" placeholder="City" value={address.city} onChange={e => setAddress({ ...address, city: e.target.value })} className="search-input" />
-                    <input type="text" placeholder="State/Province" value={address.state} onChange={e => setAddress({ ...address, state: e.target.value })} className="search-input" />
-                  </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-                    <input type="text" placeholder="Postal Code" value={address.zipCode} onChange={e => setAddress({ ...address, zipCode: e.target.value })} className="search-input" />
-                    <input type="text" placeholder="Country" value={address.country} onChange={e => setAddress({ ...address, country: e.target.value })} className="search-input" />
-                  </div>
-                </div>
-              </div>
+              {/* Shipping address removed from cart page */}
               <div className="cart-items-container">
                 {cartItems.map((item, index) => (
                   <div key={item.id} className="cart-item">
@@ -222,22 +191,26 @@ const Cart = () => {
               </div>
                 
               <div className="cart-divider"></div>
-              <div className="cart-total">
-                <span>Total : Rs </span>
-                <span className="total-amount">{getCartTotal()}.00</span>
+              <div className="cart-summary">
+                <div className="cart-total">
+                  <span>Total : Rs </span>
+                  <span className="total-amount">{getCartTotal()}.00</span>
+                </div>
+                <div className="summary-action">
+                  <button 
+                    className="checkout-btn"
+                    onClick={handleCheckout}
+                    disabled={loading || cartItems.some(ci => ci.inStock === false)}
+                  >
+                    {loading ? 'Processing...' : 'Proceed to Checkout'}
+                  </button>
+                </div>
               </div>
               {cartItems.some(ci => ci.inStock === false) && (
                 <div className="login-required" style={{ paddingTop: 10 }}>
                   <p style={{ color: '#EF4444', fontWeight: 700 }}>One or more items are out of stock. Please remove them to proceed.</p>
                 </div>
               )}
-              <button 
-                className="checkout-btn"
-                onClick={handleCheckout}
-                disabled={loading || cartItems.some(ci => ci.inStock === false)}
-              >
-                {loading ? 'Processing...' : 'Proceed to\nCheckout'}
-              </button>
             </>
           )}
         </div>

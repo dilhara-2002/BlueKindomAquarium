@@ -36,8 +36,10 @@ const ProductCard = ({ product }) => {
     }
   };
 
+  const isOutOfStock = (product.inStock === false) || (typeof product.stock === 'number' && product.stock <= 0);
+
   const handleAddToCart = () => {
-    if (!product.inStock) {
+    if (isOutOfStock) {
       alert('This product is out of stock!');
       return;
     }
@@ -61,7 +63,7 @@ const ProductCard = ({ product }) => {
   return (
     <div className="product-card">
       <div className="product-image">
-        {!product.inStock && (
+        {isOutOfStock && (
           <div style={{ position: 'absolute', top: 8, left: 8, background: '#EF4444', color: '#fff', padding: '4px 8px', borderRadius: '6px', fontSize: '12px', fontWeight: 700 }}>Out of Stock</div>
         )}
         <img 
@@ -74,12 +76,11 @@ const ProductCard = ({ product }) => {
         <h3 className="product-name">{product.name}</h3>
         <div className="product-price">Rs. {product.price}.00</div>
         <button 
-          className={`add-to-cart-btn ${product.inStock ? 'in-stock' : 'out-of-stock'}`}
+          className={`add-to-cart-btn ${!isOutOfStock ? 'in-stock' : 'out-of-stock'}`}
           onClick={handleAddToCart}
-          disabled={!product.inStock}
-          style={!product.inStock ? { background: '#EF4444', cursor: 'not-allowed' } : undefined}
+          disabled={isOutOfStock}
         >
-          {product.inStock ? 'Add to Cart' : 'Out of Stock'}
+          {!isOutOfStock ? 'Add to Cart' : 'Out of Stock'}
         </button>
       </div>
     </div>
